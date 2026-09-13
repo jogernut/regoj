@@ -120,8 +120,8 @@
   const contactForm = $('#contact-form');
   const submitBtn = $('#form-submit-btn');
   const statusEl = $('#form-status');
-  const successCard = $('#contact-success');
   const resetBtn = $('#contact-reset-btn');
+  const resetHint = $('#form-reset-hint');
 
   function submitContact(e) {
     if (e) {
@@ -129,13 +129,13 @@
       e.stopPropagation();
     }
 
-    if (!contactForm || !submitBtn || !successCard) return false;
+    if (!contactForm || !submitBtn) return false;
 
     // Clear any prior status
     if (statusEl) {
       statusEl.hidden = true;
       statusEl.className = 'form-status';
-      statusEl.textContent = '';
+      statusEl.innerHTML = '';
       statusEl.style.display = 'none';
     }
 
@@ -143,7 +143,6 @@
     submitBtn.classList.add('is-loading');
     submitBtn.disabled = true;
     const btnText = $('.form-submit__text', submitBtn);
-    const originalText = btnText ? btnText.textContent : 'Send Message';
     if (btnText) btnText.textContent = 'Sending message...';
 
     const formData = new FormData(contactForm);
@@ -159,36 +158,59 @@
     })
       .then((response) => {
         if (response.ok || response.status === 200 || response.status === 204 || response.status === 303) {
-          // Success: hide form, show confirmation card
-          contactForm.classList.add('is-hidden');
-          contactForm.hidden = true;
-          contactForm.style.display = 'none';
+          // Success: keep form view intact, activate in-form success state
+          contactForm.classList.add('is-submitted');
 
-          successCard.classList.add('is-visible');
-          successCard.hidden = false;
-          successCard.style.display = 'flex';
+          // Lock inputs
+          $$('input:not([type="hidden"]), textarea', contactForm).forEach((el) => {
+            el.disabled = true;
+          });
 
-          contactForm.reset();
+          // Update submit button to success state
+          submitBtn.classList.remove('is-loading');
+          submitBtn.classList.add('is-success');
+          submitBtn.disabled = true;
+          if (btnText) btnText.textContent = 'Message Sent';
 
-          // Keep view smoothly centered on the confirmation
-          successCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Show in-form confirmation banner
+          if (statusEl) {
+            statusEl.className = 'form-status is-success';
+            statusEl.innerHTML = `
+              <div class="form-status__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div class="form-status__content">
+                <strong>Message received!</strong>
+                <span>Thank you for reaching out. A member of our technical consulting team will review your project details and get back to you within 24 hours.</span>
+              </div>
+            `;
+            statusEl.hidden = false;
+            statusEl.style.display = 'flex';
+          }
+
+          // Show reset link
+          if (resetHint) {
+            resetHint.hidden = false;
+            resetHint.style.display = 'block';
+          }
         } else {
           throw new Error('Form submission status: ' + response.status);
         }
       })
       .catch((err) => {
         console.error('Contact form submission error:', err);
+        submitBtn.classList.remove('is-loading');
+        submitBtn.disabled = false;
+        if (btnText) btnText.textContent = 'Send Message';
+
         if (statusEl) {
           statusEl.className = 'form-status is-error';
           statusEl.textContent = 'Unable to send message right now. Please try again or email us directly at hello@regoj.com.';
           statusEl.hidden = false;
           statusEl.style.display = 'block';
         }
-      })
-      .finally(() => {
-        submitBtn.classList.remove('is-loading');
-        submitBtn.disabled = false;
-        if (btnText) btnText.textContent = originalText;
       });
 
     return false;
@@ -201,20 +223,34 @@
     contactForm.addEventListener('submit', submitContact);
   }
 
-  if (resetBtn && contactForm && successCard) {
+  if (resetBtn && contactForm) {
     resetBtn.addEventListener('click', function () {
-      successCard.classList.remove('is-visible');
-      successCard.hidden = true;
-      successCard.style.display = 'none';
+      contactForm.classList.remove('is-submitted');
 
-      contactForm.classList.remove('is-hidden');
-      contactForm.hidden = false;
-      contactForm.style.display = 'grid';
+      // Re-enable and clear inputs
+      $$('input:not([type="hidden"]), textarea', contactForm).forEach((el) => {
+        el.disabled = false;
+        el.value = '';
+      });
 
+      // Restore submit button
+      submitBtn.classList.remove('is-success', 'is-loading');
+      submitBtn.disabled = false;
+      const btnText = $('.form-submit__text', submitBtn);
+      if (btnText) btnText.textContent = 'Send Message';
+
+      // Hide status and hint
       if (statusEl) {
         statusEl.hidden = true;
         statusEl.style.display = 'none';
+        statusEl.innerHTML = '';
       }
+      if (resetHint) {
+        resetHint.hidden = true;
+        resetHint.style.display = 'none';
+      }
+
+      $('#name', contactForm)?.focus();
     });
   }
 })();

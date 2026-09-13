@@ -827,6 +827,20 @@ button:focus-visible {
   display: inline-block !important;
 }
 
+/* Success state on submit button */
+.form-submit.is-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35) !important;
+  cursor: default;
+}
+.form-submit.is-success .form-submit__arrow {
+  display: none !important;
+}
+.form-submit.is-success .form-submit__check {
+  display: inline-block !important;
+}
+
+/* Form status banner */
 .form-status {
   padding: 0.85rem 1rem;
   border-radius: var(--radius-sm);
@@ -834,71 +848,75 @@ button:focus-visible {
   line-height: 1.45;
 }
 
+.form-status.is-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+  animation: fadeIn 0.3s var(--ease-out);
+}
+
+.form-status.is-success .form-status__icon {
+  color: #34d399;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.form-status.is-success strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.98rem;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.form-status.is-success span {
+  display: block;
+  color: rgba(230, 255, 250, 0.88);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 .form-status.is-error {
   background: rgba(239, 68, 68, 0.15);
   border: 1px solid rgba(239, 68, 68, 0.4);
   color: #fca5a5;
+  display: block;
 }
 
-.contact-form.is-hidden {
-  display: none !important;
+/* Submitted state styling on inputs */
+.contact-form.is-submitted .form-field input,
+.contact-form.is-submitted .form-field textarea {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-/* Contact Success Card */
-.contact-success {
-  display: none;
-  padding: 3.5rem 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--dark-border);
-  border-radius: var(--radius);
-  flex-direction: column;
-  align-items: center;
+/* Reset hint */
+.form-reset-hint {
+  margin: 0.25rem 0 0;
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.55);
   text-align: center;
-  gap: 1rem;
-  animation: fadeIn 0.4s var(--ease-out);
 }
 
-.contact-success.is-visible {
-  display: flex !important;
+.form-reset-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--brand-light);
+  font-size: inherit;
+  font-family: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 0.35rem;
+  transition: color var(--dur) ease;
 }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.contact-success__icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(5, 150, 105, 0.28));
-  border: 1px solid rgba(52, 211, 153, 0.5);
-  color: #34d399;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 30px rgba(52, 211, 153, 0.25);
-  margin-bottom: 0.5rem;
-}
-
-.contact-success h3 {
+.form-reset-link:hover {
   color: white;
-  font-size: 1.5rem;
-  margin: 0;
-}
-
-.contact-success p {
-  color: var(--muted-light);
-  font-size: 0.98rem;
-  max-width: 440px;
-  margin: 0;
-  line-height: 1.6;
-}
-
-.contact-success__reset {
-  margin-top: 0.75rem;
-  font-size: 0.9rem;
-  padding: 0.65rem 1.35rem;
 }
 
 /* ============================================================
