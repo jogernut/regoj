@@ -1,6 +1,11 @@
 [build]
   publish = "."
 
+[[redirects]]
+  from = "/asset/*"
+  to = "/assets/:splat"
+  status = 301
+
 [[headers]]
   for = "/*"
   [headers.values]
