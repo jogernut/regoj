@@ -1,5 +1,5 @@
 /* ============================================================
-   REGOJ.COM — Styles
+   REGOJ.COM - Styles
    ============================================================ */
 
 /* --- Custom Properties --- */
@@ -510,45 +510,158 @@ button:focus-visible {
 }
 
 /* ============================================================
-   CLIENT LOGO MARQUEE
+   CLIENT PARTNER SHOWCASE
    ============================================================ */
-.marquee {
-  width: 100%;
-  overflow: hidden;
-  padding: 1.5rem 0;
-  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+.clients-section {
+  position: relative;
 }
 
-.marquee__track {
+.clients-showcase {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+.client-card {
+  background: var(--white);
+  border: 1px solid rgba(15, 23, 42, 0.07);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.25rem 1.4rem;
   display: flex;
-  animation: marquee-scroll 40s linear infinite;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+  position: relative;
+  overflow: hidden;
 }
 
-.marquee__logos {
-  display: flex; align-items: center;
-  flex-shrink: 0;
-  gap: 5rem;
-  padding: 0 2.5rem;
+.client-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-light));
+  opacity: 0;
+  transition: opacity var(--dur) ease;
 }
 
-.marquee__logo {
-  height: 48px; width: auto;
-  max-width: 180px;
-  object-fit: contain;
-  flex-shrink: 0;
-  filter: grayscale(100%) brightness(0.85);
-  opacity: 0.55;
-  transition: filter var(--dur) ease, opacity var(--dur) ease;
+.client-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 16, 176, 0.22);
+  box-shadow: 0 16px 36px rgba(0, 16, 176, 0.09);
 }
-.marquee__logo:hover {
-  filter: none;
+
+.client-card:hover::after {
   opacity: 1;
 }
 
-@keyframes marquee-scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(calc(-100% / 3)); }
+.client-card__logo-box {
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.client-card__logo {
+  max-height: 44px;
+  max-width: 155px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.92;
+  transition: transform var(--dur) var(--ease), opacity var(--dur) ease;
+}
+
+.client-card:hover .client-card__logo {
+  transform: scale(1.06);
+  opacity: 1;
+}
+
+/* Individual optical balance adjustments */
+.client-card__logo--nahco {
+  max-height: 48px;
+  max-width: 155px;
+}
+
+.client-card__logo--union {
+  max-height: 38px;
+  max-width: 165px;
+}
+
+.client-card__logo--prepclass {
+  max-height: 38px;
+  max-width: 140px;
+}
+
+.client-card__logo--tastee {
+  max-height: 40px;
+  max-width: 150px;
+}
+
+.client-card__logo--hira {
+  max-height: 30px;
+  max-width: 145px;
+}
+
+.client-card__info {
+  margin-top: auto;
+  width: 100%;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.client-card__name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+}
+
+.client-card__industry {
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+/* Bottom trust badge strip */
+.clients-badge-strip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.75rem 2.5rem;
+  padding: 1.1rem 2rem;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 999px;
+  width: fit-content;
+  margin: 0 auto;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02);
+}
+
+.trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.trust-pill svg {
+  color: var(--brand);
+  flex-shrink: 0;
 }
 
 /* ============================================================
@@ -768,6 +881,22 @@ button:focus-visible {
   .step__body { padding-top: 0.5rem; }
 
   .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+  .clients-showcase {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .clients-showcase .client-card:last-child {
+    grid-column: 1 / -1;
+    max-width: 360px;
+    margin-inline: auto;
+    width: 100%;
+  }
+  .clients-badge-strip {
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    gap: 1rem 1.5rem;
+  }
 }
 
 @media (max-width: 560px) {
@@ -775,6 +904,19 @@ button:focus-visible {
 
   .hero__actions { flex-direction: column; align-items: stretch; }
   .hero__badge { font-size: 0.75rem; }
+
+  .clients-showcase {
+    grid-template-columns: 1fr;
+  }
+  .clients-showcase .client-card:last-child {
+    max-width: 100%;
+  }
+  .clients-badge-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 1.25rem;
+  }
 
   .card { padding: 1.75rem; }
   .card__icon { width: 44px; height: 44px; }
@@ -805,6 +947,4 @@ button:focus-visible {
     opacity: 1 !important;
     transform: none !important;
   }
-
-  .marquee__track { animation: none; }
 }

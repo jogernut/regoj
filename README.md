@@ -1,6 +1,6 @@
 # Regoj.com
 
-Marketing site for Regoj — tech consulting across AI automation, web/app development, networking & VoIP, and technical consulting.
+Marketing site for Regoj - tech consulting across AI automation, web/app development, networking & VoIP, and technical consulting.
 
 ## Local preview
 
