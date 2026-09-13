@@ -156,14 +156,9 @@ button:focus-visible {
 }
 
 .header__brand {
-  display: flex; align-items: center; gap: 0.65rem; color: white;
+  display: flex; align-items: center; color: white;
 }
-.header__logo { width: 34px; height: 34px; }
-.header__name {
-  font-family: var(--font-heading);
-  font-weight: 700; font-size: 1.3rem;
-  letter-spacing: -0.03em;
-}
+.header__logo { height: 32px; width: auto; }
 
 .header__nav {
   margin-left: auto;
@@ -520,37 +515,40 @@ button:focus-visible {
 .marquee {
   width: 100%;
   overflow: hidden;
-  padding: 1rem 0;
-  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  padding: 1.5rem 0;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
 .marquee__track {
-  display: flex; width: max-content;
-  animation: marquee-scroll 35s linear infinite;
+  display: flex;
+  animation: marquee-scroll 40s linear infinite;
 }
+
 .marquee__logos {
   display: flex; align-items: center;
-  gap: 4rem;
-  padding: 0 2rem;
+  flex-shrink: 0;
+  gap: 5rem;
+  padding: 0 2.5rem;
 }
 
 .marquee__logo {
-  height: 44px; width: auto;
+  height: 40px; width: auto;
+  max-width: 160px;
   object-fit: contain;
-  filter: grayscale(100%) brightness(0.9);
-  opacity: 0.5;
+  flex-shrink: 0;
+  filter: grayscale(100%) brightness(0.85);
+  opacity: 0.55;
   transition: filter var(--dur) ease, opacity var(--dur) ease;
 }
 .marquee__logo:hover {
   filter: none;
   opacity: 1;
 }
-.marquee__logo--wide { height: 36px; }
 
 @keyframes marquee-scroll {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(calc(-100% / 3)); }
 }
 
 /* ============================================================
