@@ -116,12 +116,22 @@
     });
   });
 
-  /* ── Contact Form AJAX Handling ── */
+  /* ── Contact Form AJAX Handling & Anti-Bot Protection ── */
   const contactForm = $('#contact-form');
   const submitBtn = $('#form-submit-btn');
   const statusEl = $('#form-status');
   const resetBtn = $('#contact-reset-btn');
   const resetHint = $('#form-reset-hint');
+
+  const formLoadedTime = Date.now();
+  let hasUserInteracted = false;
+
+  if (contactForm) {
+    const markInteracted = () => { hasUserInteracted = true; };
+    contactForm.addEventListener('input', markInteracted, { once: true });
+    contactForm.addEventListener('focusin', markInteracted, { once: true });
+    contactForm.addEventListener('click', markInteracted, { once: true });
+  }
 
   function submitContact(e) {
     if (e) {
@@ -137,6 +147,41 @@
       statusEl.className = 'form-status';
       statusEl.innerHTML = '';
       statusEl.style.display = 'none';
+    }
+
+    // Anti-bot check 1: Honeypot trap check
+    const botField1 = contactForm.querySelector('input[name="bot-field"]');
+    const botField2 = contactForm.querySelector('input[name="work_phone"]');
+    const isHoneypotTriggered = (botField1 && botField1.value.trim() !== '') || (botField2 && botField2.value.trim() !== '');
+
+    // Anti-bot check 2: Superhuman velocity (< 1.8s) or zero user interaction
+    const isBotVelocity = (Date.now() - formLoadedTime < 1800) || !hasUserInteracted;
+
+    if (isHoneypotTriggered || isBotVelocity) {
+      // Silently swallow bot submission with fake success so it does not retry or probe alternate vectors
+      contactForm.classList.add('is-submitted');
+      submitBtn.classList.remove('is-loading');
+      submitBtn.classList.add('is-success');
+      submitBtn.disabled = true;
+      const btnText = $('.form-submit__text', submitBtn);
+      if (btnText) btnText.textContent = 'Message Sent';
+      if (statusEl) {
+        statusEl.className = 'form-status is-success';
+        statusEl.innerHTML = `
+          <div class="form-status__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div class="form-status__content">
+            <strong>Message received!</strong>
+            <span>Thank you for reaching out. A member of our technical consulting team will review your project details and get back to you within 24 hours.</span>
+          </div>
+        `;
+        statusEl.hidden = false;
+        statusEl.style.display = 'flex';
+      }
+      return false;
     }
 
     // Enter loading state
